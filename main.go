@@ -1,3 +1,8 @@
+// Package main is a demo of the graceful shutdown added in Go 1.8.
+// The command will run an http server with a catch-all route that will
+// perform a slow sql query, sending an interrupt signal should wait for
+// any requests to finish and then shut down the server.
+// You can read more here https://golang.org/pkg/net/http/#Server.Shutdown
 package main
 
 import (
@@ -56,7 +61,6 @@ func main() {
 
 		// We received an interrupt signal, shut down.
 		if err := server.Shutdown(context.Background()); err != nil {
-			// Error from closing listeners, or context timeout:
 			log.Printf("HTTP server Shutdown: %v", err)
 		}
 		close(idleConnsClosed)
@@ -65,7 +69,6 @@ func main() {
 	log.Printf("listening on %s\n", server.Addr)
 
 	if err := server.ListenAndServe(); err != http.ErrServerClosed {
-		// Error starting or closing listener:
 		log.Printf("HTTP server ListenAndServe: %v", err)
 	}
 
