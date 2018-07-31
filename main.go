@@ -59,7 +59,6 @@ func main() {
 		signal.Notify(sigint, os.Interrupt)
 		<-sigint
 
-		// We received an interrupt signal, shut down.
 		if err := server.Shutdown(context.Background()); err != nil {
 			log.Printf("HTTP server Shutdown: %v", err)
 		}
